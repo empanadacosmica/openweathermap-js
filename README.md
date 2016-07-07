@@ -3,11 +3,11 @@ Node.js module to simplify use of Openweathermap weather APIs in node.js project
 
 ## How it works
 To use it, simply use the require function in your node.js app.
-```
+```javascript
 const weather = require('openweathermap-js');
 ```
 You can then use the included functions :
-```
+```javascript
 weather.defaults({
   location: 'Muhlbach-sur-Munster',
   appid:    'xxxx',
