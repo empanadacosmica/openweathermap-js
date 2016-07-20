@@ -64,7 +64,7 @@ function current(opt, callback) {
 		callback(new Error('You must define an Api KEY !'));
 	}
 	var url = 'http://api.openweathermap.org/data/2.5';
-	switch(opt.method ? opt.method.toLowerCase() : options.method.toLowerCase()) {
+	switch(opt.method ? opt.method.toLowerCase() : (options.method ? options.method.toLowerCase() : 'name')) {
 		case 'name':
 		case 'city':
 		case 'cityname':

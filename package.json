@@ -14,7 +14,7 @@
     "weather",
     "openweathermap"
   ],
-  "author": "Edgar Pierre BURKHART",
+  "author": "Edgar Pierre BURKHART <edgarpierre.burkhart@icloud.com>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/edpiburkhart/openweathermap-js/issues"
