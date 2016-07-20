@@ -11,6 +11,7 @@ The first release of this module only includes a function to get the current wea
 weather.defaults({
 	appid: '',
 	location: 'London',
+	cityID: 1851632,	// Shuzenji, JP
 	method: 'name',
 	format: 'JSON',
 	accuracy: 'accurate',
@@ -22,13 +23,13 @@ weather.current(function(err, data) {
   if (!err)
     console.log(data);
   else
-    console.error(err.message());
+    console.error(err.message);
 });
 
-weather.current({location: 'Paris', lang: 'fr', units: 'metric'}, function(err, data) {
+weather.forecast({method: 'cityID', lang: 'en', units: 'metric'}, function(err, data) {
 	if (!err)
 		console.log(data);
 	else
-		console.error(err.message());
-})
+		console.error(err.message);
+});
 ```

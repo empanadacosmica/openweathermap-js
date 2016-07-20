@@ -63,56 +63,44 @@ function current(opt, callback) {
 	if (!opt.appid && !options.appid) {
 		callback(new Error('You must define an Api KEY !'));
 	}
-	if (!opt.method) opt.method = options.method;
 	var url = 'http://api.openweathermap.org/data/2.5';
-	switch(opt.method.toLowerCase()) {
+	switch(opt.method ? opt.method.toLowerCase() : options.method.toLowerCase()) {
 		case 'name':
 		case 'city':
 		case 'cityname':
 		case 'city-name':
-			url += '/weather?q=';
-			url += opt.location ? opt.location : options.location;
+			url += '/weather?q=' + (opt.location ? opt.location : options.location);
 			break;
 		case 'cityid':
 		case 'id':
-			url += '/weather?id=';
-			url += opt.cityID ? opt.cityID : options.cityID;
+			url += '/weather?id=' + (opt.cityID ? opt.cityID : options.cityID);
 			break;
 		case 'coord':
 		case 'coordinates':
-			url += '/weather?lat=';
-			url += opt.coord.lat ? opt.coord.lat : options.coord.lat;
-			url += '&lon=';
-			url += opt.coord.lon ? opt.coord.lon : options.coord.lon;
+			url += '/weather?lat=' + (opt.coord.lat ? opt.coord.lat : options.coord.lat)
+				+ '&lon=' + (opt.coord.lon ? opt.coord.lon : options.coord.lon);
 			break;
 		case 'zipcode':
 		case 'code':
 		case 'zip':
-			url += '/weather?zip=';
-			url += opt.ZIPcode ? opt.ZIPcode : options.ZIPcode;
+			url += '/weather?zip=' + (opt.ZIPcode ? opt.ZIPcode : options.ZIPcode);
 			break;
 		case 'box':
 		case 'rectangle':
-			url += '/box/city?bbox=';
-			url += opt.bbox ? opt.bbox : options.bbox;
-			url += '&cluster=';
-			url += opt.cluster !== undefined ? (opt.cluster ? 'yes' : 'no') : (options.cluster ? 'yes' : 'no');
+			url += '/box/city?bbox=' + (opt.bbox ? opt.bbox : options.bbox)
+				+ '&cluster=' + (opt.cluster !== undefined ? (opt.cluster ? 'yes' : 'no') : (options.cluster ? 'yes' : 'no'));
 			break;
 		case 'cycle':
-			url += '/find?lat=';
-			url += opt.coord.lat ? opt.coord.lat : options.coord.lat;
-			url += '&lon=';
-			url += opt.coord.lon ? opt.coord.lon : options.coord.lon;
-			url += '&cnt=';
-			url += opt.cnt ? opt.cnt : options.cnt;
+			url += '/find?lat=' + (opt.coord.lat ? opt.coord.lat : options.coord.lat)
+				+ '&lon=' + (opt.coord.lon ? opt.coord.lon : options.coord.lon)
+				+ '&cnt=' + (opt.cnt ? opt.cnt : options.cnt);
 			break;
 		case 'group':
-			url += '/group?id=';
-			url += opt.id ? opt.cityID : options.cityID;
+			url += '/group?id=' + (opt.id ? opt.cityID : options.cityID);
 			break;
 		default:
-			throw new Error('Request method has not been set !');
-			callback(new Error('Request method has not been set !'));
+			throw new Error('Request method not valid !');
+			callback(new Error('Request method not valid !'));
 			return;
 	}
 
@@ -137,5 +125,65 @@ function current(opt, callback) {
 	});
 }
 
+function forecast(opt, callback) {
+	if (callback === undefined) {
+		callback = opt;
+		opt = {};
+	}
+	if (!opt.appid && !options.appid) {
+		callback(new Error('You must define an Api KEY !'));
+	}
+	var url = 'http://api.openweathermap.org/data/2.5';
+	switch(opt.method ? opt.method.toLowerCase() : options.method.toLowerCase()) {
+		case 'name':
+		case 'city':
+		case 'cityname':
+		case 'city-name':
+			url += '/forecast?q=' + (opt.location ? opt.location : options.location);
+			break;
+		case 'cityid':
+		case 'id':
+			url += '/forecast?id=' + (opt.cityID ? opt.cityID : options.cityID);
+			break;
+		case 'coord':
+		case 'coordinates':
+			url += '/forecast?lat=' + (opt.coord.lat ? opt.coord.lat : options.coord.lat)
+				+ '&lon=' + (opt.coord.lon ? opt.coord.lon : options.coord.lon);
+			break;
+		case 'zipcode':
+		case 'code':
+		case 'zip':
+			url += '/forecast?zip=' + (opt.ZIPcode ? opt.ZIPcode : options.ZIPcode);
+			break;
+		default:
+			throw new Error('Request method not valid !');
+			callback(new Error('Request method not valid !'));
+			return;
+	}
+
+	if (opt.format || options.format)
+		url += '&mode=' + (opt.format ? opt.format : options.format);
+	if (opt.accuracy || options.accuracy)
+		url += '&type=' + (opt.accuracy ? opt.accuracy : options.accuracy);
+	if (opt.units || options.units)
+		url += '&units=' + (opt.units ? opt.units : options.units);
+	if (opt.lang || options.lang)
+		url += '&lang=' + (opt.lang ? opt.lang : options.lang);
+	if (opt.cnt || options.cnt)
+		url += '&cnt=' + (opt.cnt ? opt.cnt : options.cnt);
+
+	url += '&appid=' + (opt.appid ? opt.appid : options.appid);
+
+	request(url, function(error, response, body) {
+		if (!error && response.statusCode == 200) {
+			if (opt.format ? opt.format.toLowerCase() :  options.format ? options.format.toLowerCase() == 'json' : true)
+				callback(undefined, JSON.parse(body));
+			else
+				callback(undefined, body);
+		} else callback(error, response);
+	});
+}
+
 exports.defaults = defaults;
 exports.current = current;
+exports.forecast = forecast;
