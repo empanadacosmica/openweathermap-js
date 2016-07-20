@@ -184,6 +184,50 @@ function forecast(opt, callback) {
 	});
 }
 
-exports.defaults = defaults;
-exports.current = current;
-exports.forecast = forecast;
+function daily(opt, callback) {
+	if (callback === undefined) {
+		callback = opt;
+		opt = {};
+	}
+	if (!opt.appid && !options.appid) {
+		callback(new Error('You must define an Api KEY !'));
+	}
+	var url = 'http://api.openweathermap.org/data/2.5';
+	switch(opt.method ? opt.method.toLowerCase() : options.method.toLowerCase()) {
+		case 'name':
+		case 'city':
+		case 'cityname':
+		case 'city-name':
+			url += '/forecast/daily?q=' + (opt.location ? opt.location : options.location);
+			break;
+		case 'cityid':
+		case 'id':
+			url += '/forecast/daily?id=' + (opt.cityID ? opt.cityID : options.cityID);
+			break;
+		case 'coord':
+		case 'coordinates':
+			url += '/forecast/daily?lat=' + (opt.coord.lat ? opt.coord.lat : options.coord.lat)
+				+ '&lon=' + (opt.coord.lon ? opt.coord.lon : options.coord.lon);
+			break;
+		default:
+			throw new Error('Request method not valid !');
+			callback(new Error('Request method not valid !'));
+			return;
+	}
+
+	url += '&appid=' + (opt.appid ? opt.appid : options.appid);
+
+	request(url, function(error, response, body) {
+		if (!error && response.statusCode == 200) {
+			if (opt.format ? opt.format.toLowerCase() :  options.format ? options.format.toLowerCase() == 'json' : true)
+				callback(undefined, JSON.parse(body));
+			else
+				callback(undefined, body);
+		} else callback(error, response);
+	});
+}
+
+exports.defaults 	= defaults;
+exports.current 	= current;
+exports.forecast 	= forecast;
+exports.daily 		= daily;
