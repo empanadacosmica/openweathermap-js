@@ -1,6 +1,6 @@
 {
   "name": "openweathermap-js",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Node.js module to simplify usage of openweathermap weather APIs with node.js apps.",
   "main": "app.min.js",
   "scripts": {
