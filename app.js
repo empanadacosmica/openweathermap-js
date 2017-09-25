@@ -20,7 +20,7 @@ var options = {
 	lang: 'en'
 }
 */
-var options = {};
+var options = {coord: {}};
 
 function defaults(opt) {
 	if (opt.appid)
